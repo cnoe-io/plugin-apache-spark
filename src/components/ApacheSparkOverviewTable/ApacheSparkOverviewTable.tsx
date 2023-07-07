@@ -7,11 +7,9 @@ import {
   Table,
   TableColumn,
 } from '@backstage/core-components';
-import { useEntity } from '@backstage/plugin-catalog-react';
 import { useApi } from '@backstage/core-plugin-api';
 import { apacheSparkApiRef } from '../../api';
 import React, { useEffect, useState } from 'react';
-import { getAnnotationValues } from '../utils';
 import useAsync from 'react-use/lib/useAsync';
 import { ApacheSpark, ApacheSparkList } from '../../api/model';
 import Alert from '@material-ui/lab/Alert';
@@ -28,7 +26,7 @@ type TableData = {
   raw: ApacheSpark;
 };
 
-const columns: TableColumn[] = [
+const columns: TableColumn<TableData>[] = [
   {
     title: 'Name',
     field: 'name',
@@ -124,6 +122,8 @@ export const ApacheSparkOverviewTable = () => {
           paging: true,
           search: true,
           sorting: true,
+          pageSize: 10,
+          pageSizeOptions: [5, 10, 20, 50],
         }}
         onRowClick={(_event, rowData: TableData | undefined) => {
           setDrawerData(rowData?.raw!);

@@ -19,7 +19,7 @@ export const ApacheSparkDriverLogs = (props: { sparkApp: ApacheSpark }) => {
     return await apiClient.getLogs(
       'cnoe-packaging-2',
       'default',
-      props.sparkApp.status.driverInfo.podName,
+      props.sparkApp.status.driverInfo?.podName!,
       'spark-kubernetes-driver',
     );
   }, [props]);

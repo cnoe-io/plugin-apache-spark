@@ -46,7 +46,7 @@ export class ApacheSparkClient implements ApacheSparkApi {
   async getSparkApps(
     clusterName: string | undefined,
     namespace: string | undefined,
-    labels: string,
+    _labels: string,
   ): Promise<ApacheSparkList> {
     const ns = namespace !== undefined ? namespace : 'default';
     const path = `/apis/${API_VERSION}/namespaces/${ns}/${SPARK_APP_PLURAL}`;
