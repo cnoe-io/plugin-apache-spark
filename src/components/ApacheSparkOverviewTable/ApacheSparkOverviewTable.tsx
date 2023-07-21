@@ -15,6 +15,8 @@ import { ApacheSpark, ApacheSparkList } from '../../api/model';
 import Alert from '@material-ui/lab/Alert';
 import { createStyles, Drawer, makeStyles, Theme } from '@material-ui/core';
 import { DrawerContent } from '../DetailedDrawer/DetailedDrawer';
+import { getAnnotationValues } from '../utils';
+import { useEntity } from '@backstage/plugin-catalog-react';
 
 type TableData = {
   id: string;
@@ -55,21 +57,17 @@ const useDrawerStyles = makeStyles((theme: Theme) =>
 );
 
 export const ApacheSparkOverviewTable = () => {
-  // const { entity } = useEntity();
   const apiClient = useApi(apacheSparkApiRef);
   const [columnData, setColumnData] = useState([] as TableData[]);
   const [isOpen, toggleDrawer] = useState(false);
   const [drawerData, setDrawerData] = useState({} as ApacheSpark);
   const classes = useDrawerStyles();
-  // const { ns, clusterName, labelSelector } = getAnnotationValues(entity);
+  const { entity } = useEntity();
+  const { ns, clusterName, labelSelector } = getAnnotationValues(entity);
 
   const { value, loading, error } = useAsync(
     async (): Promise<ApacheSparkList> => {
-      return await apiClient.getSparkApps(
-        'cnoe-packaging-2',
-        'default',
-        undefined,
-      );
+      return await apiClient.getSparkApps(clusterName, ns, labelSelector);
     },
   );
 

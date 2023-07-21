@@ -1,12 +1,19 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { useApi } from '@backstage/core-plugin-api';
+import { useEntity } from '@backstage/plugin-catalog-react';
 import useAsync from 'react-use/lib/useAsync';
 import { ApacheSpark } from '../../api/model';
 import { ApacheSparkDriverLogs } from './ApacheSparkLogs';
+import {
+  APACHE_SPARK_LABEL_SELECTOR_ANNOTATION,
+  CLUSTER_NAME_ANNOTATION,
+  K8S_NAMESPACE_ANNOTATION,
+} from '../../consts';
 
 jest.mock('@backstage/core-plugin-api');
 jest.mock('react-use/lib/useAsync');
+jest.mock('@backstage/plugin-catalog-react');
 
 jest.mock('@backstage/core-components', () => ({
   LogViewer: (props: { text: string }) => {
@@ -17,6 +24,7 @@ jest.mock('@backstage/core-components', () => ({
 describe('ApacheSparkDriverLogs', () => {
   const mockUseApi = useApi as jest.MockedFunction<typeof useApi>;
   const mockUseAsync = useAsync as jest.MockedFunction<typeof useAsync>;
+  const mockUseEntity = useEntity as jest.MockedFunction<typeof useEntity>;
   const mockGetLogs = jest.fn();
   const mockSparkApp = {
     status: {
@@ -29,6 +37,21 @@ describe('ApacheSparkDriverLogs', () => {
   beforeEach(() => {
     mockUseApi.mockReturnValue({
       getLogs: mockGetLogs,
+    });
+    mockUseEntity.mockReturnValue({
+      entity: {
+        apiVersion: 'version',
+        kind: 'kind',
+        metadata: {
+          name: 'name',
+          namespace: 'ns1',
+          annotations: {
+            [K8S_NAMESPACE_ANNOTATION]: 'k8s-ns',
+            [CLUSTER_NAME_ANNOTATION]: 'my-cluster',
+            [APACHE_SPARK_LABEL_SELECTOR_ANNOTATION]: 'env=test',
+          },
+        },
+      },
     });
   });
 
