@@ -5,8 +5,8 @@ metadata:
   name: ${{values.name | dump}}
   annotations:
     backstage.io/kubernetes-id: "${{values.clusterName}}"
-    apache-spark/cluster-name: "${{values.clusterName}}"
-    argo-workflows/cluster-name: "${{values.clusterName}}"
+    apache-spark.cnoe.io/cluster-name: "${{values.clusterName}}"
+    argo-workflows.cnoe.io/cluster-name: "${{values.clusterName}}"
     backstage.io/kubernetes-namespace: "${{values.namespace}}"
     backstage.io/kubernetes-label-selector: "backstage.io/component-id=${{values.name}}"
 spec:
