@@ -13,7 +13,11 @@ This plugin allows you to display information related to your Apache Spark Appli
 
 [The Kubernetes plugin](https://backstage.io/docs/features/kubernetes/) must also be installed and enabled.  
 
-Entities must be annotated with Kubernetes annotations. For example:
+Entities must be annotated with Kubernetes annotations. An example component
+would look like the following where you can configure the `spec` to your
+liking. Information specific to your Spark Operator goes under `annotations` as
+shown below:
+
 ```yaml
 apiVersion: backstage.io/v1alpha1
 kind: Component
@@ -21,21 +25,47 @@ metadata:
   name: backstage
   annotations:
     backstage.io/kubernetes-namespace: default
-    backstage.io/kubernetes-label-selector: env=dev,my=label
+    apache-spark.cnoe.io/label-selector: env=dev,my=label
+spec:
+  type: service
+  lifecycle: experimental
+  owner: user1
+  system: system1
 ```
 
 Update your Entity page. For example:
 ```typescript
 // in packages/app/src/components/catalog/EntityPage.tsx
 
-```
+import {
+  ApacheSparkPage
+} from '@cnoe-io/plugin-apache-spark'
 
+const serviceEntityPage = (
+  <EntityLayout>
+
+    ...
+
+    <EntityLayout.Route path="/apache-spark" title="Spark">
+      <ApacheSparkPage />
+    </EntityLayout.Route>
+
+    ...
+  </EntityLayout>
+)
+
+```
 
 #### Annotations
 - `backstage.io/kubernetes-namespace`: Optional. Defaults to the `default` namespace.
-- `backstage.io/kubernetes-label-selector`: Conditionally required. One of label selectors must be defined.
-- `apache-spark/label-selector`: Conditionally required. One of label selectors must be defined. This value takes precedent over the one above.
-- `apache-spark/cluster-name`: Optional. Specifies the name of Kubernetes cluster to retrieve information from.
+- `apache-spark.cnoe.io/label-selector`: This value takes precedent over the one above.
+- `apache-spark.cnoe.io/cluster-name`: Optional. Specifies the name of Kubernetes cluster to retrieve information from.
+
+you can also use the `backstage.io/kubernetes-label-selector`, to select the
+relevant spark jobs. However , `backstage.io/kubernetes-label-selector` is a
+generic label selector used more widely by the Kubernetes plugin which could
+pull other less relevant data pulled into your backstage deployment as well. We
+recommend using `apache-spark.cnoe.io/label-selector` when using this plugin.
 
 ### Authentication
 
@@ -61,7 +91,7 @@ kubernetes:
           caData: LS0t
 ```
 
-For this configuration, the `argo-workflows/cluster-name` annotation value must be `my-cluster-1`. If this is not specified, the first cluster in the list is selected.
+For this configuration, the `apache-spark.cnoe.io/cluster-name` annotation value must be `my-cluster-1`. If this is not specified, the first cluster in the list is selected.
 
 ```yaml
 apiVersion: backstage.io/v1alpha1
@@ -70,6 +100,11 @@ metadata:
   name: backstage
   annotations:
     backstage.io/kubernetes-namespace: default
-    backstage.io/kubernetes-label-selector: env=dev,my=label
-    argo-workflows/cluster-name: my-cluster-1
+    apache-spark.cnoe-io/label-selector: env=dev,my=label
+    apache-spark.cnoe.io/cluster-name: my-cluster-1
+spec:
+  type: service
+  lifecycle: experimental
+  owner: user1
+  system: system1
 ```
