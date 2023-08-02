@@ -77,23 +77,24 @@ const upperCaseFirstChar = (s: string) => {
 };
 
 export const DrawerOverview = (props: { sparkApp: ApacheSpark }) => {
+  const data = generateMetadata(props.sparkApp)
   return (
     <div className={useStyles().content}>
       <InfoCard title="Apache Spark Application">
         <StructuredMetadataTable
-          metadata={generateMetadata(props.sparkApp).app}
+          metadata={data.app}
           options={{ titleFormat: upperCaseFirstChar }}
         />
       </InfoCard>
       <InfoCard title="Driver">
         <StructuredMetadataTable
-          metadata={generateMetadata(props.sparkApp).driver}
+          metadata={data.driver}
           options={{ titleFormat: upperCaseFirstChar }}
         />
       </InfoCard>
       <InfoCard title="Executors">
         <StructuredMetadataTable
-          metadata={generateMetadata(props.sparkApp).executor}
+          metadata={data.executor}
           options={{ titleFormat: upperCaseFirstChar }}
         />
       </InfoCard>
