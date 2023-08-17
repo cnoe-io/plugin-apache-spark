@@ -1,1 +1,1 @@
-export { apacheSparkPlugin, ApacheSparkPage } from './plugin';
+export {apacheSparkPlugin, ApacheSparkPage, isApacheSparkAvailable} from './plugin';
