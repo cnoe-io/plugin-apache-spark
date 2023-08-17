@@ -4,9 +4,17 @@ import {
   createRoutableExtension,
 } from '@backstage/core-plugin-api';
 
-import { rootRouteRef } from './routes';
-import { apacheSparkApiRef, ApacheSparkClient } from './api';
-import { kubernetesApiRef } from '@backstage/plugin-kubernetes';
+import {rootRouteRef} from './routes';
+import {apacheSparkApiRef, ApacheSparkClient} from './api';
+import {kubernetesApiRef} from '@backstage/plugin-kubernetes';
+import {Entity} from '@backstage/catalog-model';
+
+import {
+  APACHE_SPARK_LABEL_SELECTOR_ANNOTATION,
+} from './consts';
+
+export const isApacheSparkAvailable = (entity: Entity) =>
+  Boolean(entity.metadata.annotations?.[APACHE_SPARK_LABEL_SELECTOR_ANNOTATION]);
 
 export const apacheSparkPlugin = createPlugin({
   id: 'apache-spark',
@@ -19,7 +27,7 @@ export const apacheSparkPlugin = createPlugin({
       deps: {
         kubernetesApi: kubernetesApiRef,
       },
-      factory: ({ kubernetesApi }) => new ApacheSparkClient(kubernetesApi),
+      factory: ({kubernetesApi}) => new ApacheSparkClient(kubernetesApi),
     }),
   ],
 });

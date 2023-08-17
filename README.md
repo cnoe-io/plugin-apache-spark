@@ -46,7 +46,7 @@ const serviceEntityPage = (
 
     ...
 
-    <EntityLayout.Route path="/apache-spark" title="Spark">
+    <EntityLayout.Route path="/apache-spark" title="Spark" if={isApacheSparkAvailable}>
       <ApacheSparkPage />
     </EntityLayout.Route>
 
@@ -57,15 +57,10 @@ const serviceEntityPage = (
 ```
 
 #### Annotations
+- `apache-spark.cnoe.io/label-selector`: Required. This value corresponds to the label on
+  the Pod running the Spark job.
 - `backstage.io/kubernetes-namespace`: Optional. Defaults to the `default` namespace.
-- `apache-spark.cnoe.io/label-selector`: This value takes precedent over the one above.
 - `apache-spark.cnoe.io/cluster-name`: Optional. Specifies the name of Kubernetes cluster to retrieve information from.
-
-you can also use the `backstage.io/kubernetes-label-selector`, to select the
-relevant spark jobs. However , `backstage.io/kubernetes-label-selector` is a
-generic label selector used more widely by the Kubernetes plugin which could
-pull other less relevant data pulled into your backstage deployment as well. We
-recommend using `apache-spark.cnoe.io/label-selector` when using this plugin.
 
 ### Authentication
 
